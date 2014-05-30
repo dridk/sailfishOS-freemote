@@ -53,12 +53,25 @@ ApplicationWindow
 
 
 
+    ContextMenu {
+        MenuItem {
+            text: "Option 1"
+            onClicked: console.log("Clicked Option 1")
+        }
+        MenuItem {
+            text: "Option 2"
+            onClicked: console.log("Clicked Option 2")
+        }
+    }
+
 
 
 
     Component.onCompleted: {
         console.debug("salut")
         root.pageStack.pushAttached(secondPage,"")
+
+
 
     }
 
@@ -73,10 +86,18 @@ ApplicationWindow
         Page {
             id:page
 
+            RemorsePopup { id: remorse }
+
             SilicaFlickable {
                 anchors.fill: parent
 
                 PullDownMenu {
+                    MenuItem {
+                        text: "Code télécommande"
+                        onClicked:{
+                          dialog.open(true,true)
+                        }
+                    }
 
                     MenuItem {
                         text: "Accueil Freebox"
@@ -93,17 +114,15 @@ ApplicationWindow
                     }
 
 
-
-                }
-
-
-                PushUpMenu {
                     MenuItem {
                         text: "Eteindre / Allumer la Freebox"
-                        onClicked: sendRequest("power")
+                        onClicked:remorse.execute("Execution", function() { sendRequest("power")} )
+
                     }
 
                 }
+
+
 
 
                 Column {
@@ -134,8 +153,8 @@ ApplicationWindow
 
 
                         Button {
-                            text: "Volume -"
-                            onClicked: sendRequest("vol_dec")
+                            text: "Programme +"
+                            onClicked: sendRequest("prgm_inc")
                         }
 
                     }
@@ -161,7 +180,7 @@ ApplicationWindow
                         IconButton {
                             icon.source: "image://theme/icon-cover-next-song"
                             icon.scale: 1
-                             onClicked: sendRequest("play")
+                            onClicked: sendRequest("play")
 
                         }
 
@@ -170,7 +189,7 @@ ApplicationWindow
                         IconButton {
                             icon.source: "image://theme/icon-m-next-song"
                             icon.scale: 2
-                             onClicked: sendRequest("fwd")
+                            onClicked: sendRequest("fwd")
                         }
 
 
@@ -184,14 +203,14 @@ ApplicationWindow
                     Row {
                         anchors.horizontalCenter: parent.horizontalCenter
                         Button {
-                            text: "Programme +"
-                            onClicked: sendRequest("prgm_inc")
+                            text: "Volume -"
+                            onClicked: sendRequest("vol_dec")
                         }
 
 
                         Button {
                             text: "Programme -"
-                              onClicked: sendRequest("prgm_dec")
+                            onClicked: sendRequest("prgm_dec")
                         }
 
                     }
@@ -203,108 +222,127 @@ ApplicationWindow
     }
 
 
-    Component {
 
-        id:secondPage
-        Page {
-
-            Grid {
-                anchors.centerIn: parent
-                columns: 3
-                rows: 3
-                spacing: 60
-
-                ColorButton {
-                    color:"red"
-                    onClicked: sendRequest("red")
-
-                }
+        Dialog {
+            id:dialog
+            canAccept: true
+            Column {
+                spacing: Theme.paddingMedium
+                y: Theme.paddingLarge
+                width: parent.width
 
 
-
-                IconButton {
-                    icon.source: "image://theme/icon-direction-forward"
-                    icon.horizontalAlignment: Image.AlignHCenter
-                    width: 120
-                    height: 120
-                    onClicked: sendRequest("up")
-
-                }
-
-                ColorButton {
-                    color:"blue"
-                    onClicked: sendRequest("blue")
-                }
-
-                IconButton {
-                    icon.source: "image://theme/icon-direction-forward"
-                    icon.horizontalAlignment: Image.AlignHCenter
-                    width: 120
-                    height: 120
-                    rotation:-90
-                    onClicked: sendRequest("left")
-
-                }
-
-                Label {
-                    width: 120
-                    height: 120
-                    text:"OK"
-                    font.pixelSize:Theme.fontSizeExtraLarge
-                    font.family: Theme.fontFamily
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                    color:okLabel.pressed ? Theme.highlightColor : Theme.primaryColor
-
-                    MouseArea{
-                        id:okLabel
-                        anchors.fill: parent
-                        onClicked: sendRequest("ok")
-                    }
-
-                }
-
-                IconButton {
-                    icon.source: "image://theme/icon-direction-forward"
-                    icon.horizontalAlignment: Image.AlignHCenter
-                    width: 120
-                    height: 120
-                    rotation:90
-                    onClicked: sendRequest("right")
-
-                }
-
-                ColorButton {
-                    color:"green"
-                    onClicked: sendRequest("green")
-                }
-
-
-                IconButton {
-                    icon.source: "image://theme/icon-direction-forward"
-                    icon.horizontalAlignment: Image.AlignHCenter
-                    width: 120
-                    height: 120
-                    rotation:180
-                    onClicked: sendRequest("down")
-
-                }
-
-                ColorButton {
-                    color:"yellow"
-                    onClicked: sendRequest("yellow")
+                PageHeader {
+                    title: "Code "
                 }
 
 
             }
 
+    }
+
+        Component {
+
+            id:secondPage
+            Page {
+
+                Grid {
+                    anchors.centerIn: parent
+                    columns: 3
+                    rows: 3
+                    spacing: 60
+
+                    ColorButton {
+                        color:"red"
+                        onClicked: sendRequest("red")
+
+                    }
+
+
+
+                    IconButton {
+                        icon.source: "image://theme/icon-direction-forward"
+                        icon.horizontalAlignment: Image.AlignHCenter
+                        width: 120
+                        height: 120
+                        onClicked: sendRequest("up")
+
+                    }
+
+                    ColorButton {
+                        color:"blue"
+                        onClicked: sendRequest("blue")
+                    }
+
+                    IconButton {
+                        icon.source: "image://theme/icon-direction-forward"
+                        icon.horizontalAlignment: Image.AlignHCenter
+                        width: 120
+                        height: 120
+                        rotation:-90
+                        onClicked: sendRequest("left")
+
+                    }
+
+                    Label {
+                        width: 120
+                        height: 120
+                        text:"OK"
+                        font.pixelSize:Theme.fontSizeExtraLarge
+                        font.family: Theme.fontFamily
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        color:okLabel.pressed ? Theme.highlightColor : Theme.primaryColor
+
+                        MouseArea{
+                            id:okLabel
+                            anchors.fill: parent
+                            onClicked: sendRequest("ok")
+                        }
+
+                    }
+
+                    IconButton {
+                        icon.source: "image://theme/icon-direction-forward"
+                        icon.horizontalAlignment: Image.AlignHCenter
+                        width: 120
+                        height: 120
+                        rotation:90
+                        onClicked: sendRequest("right")
+
+                    }
+
+                    ColorButton {
+                        color:"green"
+                        onClicked: sendRequest("green")
+                    }
+
+
+                    IconButton {
+                        icon.source: "image://theme/icon-direction-forward"
+                        icon.horizontalAlignment: Image.AlignHCenter
+                        width: 120
+                        height: 120
+                        rotation:180
+                        onClicked: sendRequest("down")
+
+                    }
+
+                    ColorButton {
+                        color:"yellow"
+                        onClicked: sendRequest("yellow")
+                    }
+
+
+                }
+
+
+            }
 
         }
 
+
+
     }
-
-
-
-}
 
 
