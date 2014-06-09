@@ -35,7 +35,24 @@ ApplicationWindow
 {
     id:root
 
+    cover: CoverBackground{
+        CoverPlaceholder {
+            text: "FreeMote"
+        }
+        CoverActionList {
 
+            CoverAction {
+                iconSource: "image://theme/icon-status-silent"
+                onTriggered:  sendRequest("mute")
+
+            }
+            CoverAction {
+                iconSource: "image://theme/icon-m-play"
+                onTriggered:  sendRequest("play")
+
+            }
+        }
+    }
 
     function sendRequest(uri) {
 
@@ -95,7 +112,7 @@ ApplicationWindow
                     MenuItem {
                         text: "Code télécommande"
                         onClicked:{
-                          dialog.open()
+                            dialog.open()
                         }
                     }
 
@@ -178,7 +195,7 @@ ApplicationWindow
                         }
 
                         IconButton {
-                            icon.source: "image://theme/icon-cover-next-song"
+                            icon.source: "image://theme/icon-m-play"
                             icon.scale: 1
                             onClicked: sendRequest("play")
 
@@ -223,146 +240,146 @@ ApplicationWindow
 
 
 
-        Dialog {
-            id:dialog
-            canAccept: true
+    Dialog {
+        id:dialog
+        canAccept: true
 
-            onAccepted: {
-                settings.saveCode(textField.text);
-               dialog.close()
-
-            }
-
-
-            Column {
-                spacing: Theme.paddingMedium
-                y: Theme.paddingLarge
-                anchors.fill: parent
-
-
-                DialogHeader {
-                           acceptText: "Enregister"
-                           title: "Code"
-
-                       }
-
-                TextField {
-                    id:textField
-                    text: settings.code()
-                    width: parent.width
-                    inputMethodHints: Qt.ImhDigitsOnly
-                    label: "Récupérer le code depuis votre Freebox"
-                    placeholderText: "Entrer le code ..."
-
-                }
-
-
-            }
-
-    }
-
-        Component {
-
-            id:secondPage
-            Page {
-
-                Grid {
-                    anchors.centerIn: parent
-                    columns: 3
-                    rows: 3
-                    spacing: 60
-
-                    ColorButton {
-                        color:"red"
-                        onClicked: sendRequest("red")
-
-                    }
-
-
-
-                    IconButton {
-                        icon.source: "image://theme/icon-direction-forward"
-                        icon.horizontalAlignment: Image.AlignHCenter
-                        width: 120
-                        height: 120
-                        onClicked: sendRequest("up")
-
-                    }
-
-                    ColorButton {
-                        color:"blue"
-                        onClicked: sendRequest("blue")
-                    }
-
-                    IconButton {
-                        icon.source: "image://theme/icon-direction-forward"
-                        icon.horizontalAlignment: Image.AlignHCenter
-                        width: 120
-                        height: 120
-                        rotation:-90
-                        onClicked: sendRequest("left")
-
-                    }
-
-                    Label {
-                        width: 120
-                        height: 120
-                        text:"OK"
-                        font.pixelSize:Theme.fontSizeExtraLarge
-                        font.family: Theme.fontFamily
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                        color:okLabel.pressed ? Theme.highlightColor : Theme.primaryColor
-
-                        MouseArea{
-                            id:okLabel
-                            anchors.fill: parent
-                            onClicked: sendRequest("ok")
-                        }
-
-                    }
-
-                    IconButton {
-                        icon.source: "image://theme/icon-direction-forward"
-                        icon.horizontalAlignment: Image.AlignHCenter
-                        width: 120
-                        height: 120
-                        rotation:90
-                        onClicked: sendRequest("right")
-
-                    }
-
-                    ColorButton {
-                        color:"green"
-                        onClicked: sendRequest("green")
-                    }
-
-
-                    IconButton {
-                        icon.source: "image://theme/icon-direction-forward"
-                        icon.horizontalAlignment: Image.AlignHCenter
-                        width: 120
-                        height: 120
-                        rotation:180
-                        onClicked: sendRequest("down")
-
-                    }
-
-                    ColorButton {
-                        color:"yellow"
-                        onClicked: sendRequest("yellow")
-                    }
-
-
-                }
-
-
-            }
+        onAccepted: {
+            settings.saveCode(textField.text);
+            dialog.close()
 
         }
 
 
+        Column {
+            spacing: Theme.paddingMedium
+            y: Theme.paddingLarge
+            anchors.fill: parent
+
+
+            DialogHeader {
+                acceptText: "Enregister"
+                title: "Code"
+
+            }
+
+            TextField {
+                id:textField
+                text: settings.code()
+                width: parent.width
+                inputMethodHints: Qt.ImhDigitsOnly
+                label: "Récupérer le code depuis votre Freebox"
+                placeholderText: "Entrer le code ..."
+
+            }
+
+
+        }
 
     }
+
+    Component {
+
+        id:secondPage
+        Page {
+
+            Grid {
+                anchors.centerIn: parent
+                columns: 3
+                rows: 3
+                spacing: 60
+
+                ColorButton {
+                    color:"red"
+                    onClicked: sendRequest("red")
+
+                }
+
+
+
+                IconButton {
+                    icon.source: "image://theme/icon-direction-forward"
+                    icon.horizontalAlignment: Image.AlignHCenter
+                    width: 120
+                    height: 120
+                    onClicked: sendRequest("up")
+
+                }
+
+                ColorButton {
+                    color:"blue"
+                    onClicked: sendRequest("blue")
+                }
+
+                IconButton {
+                    icon.source: "image://theme/icon-direction-forward"
+                    icon.horizontalAlignment: Image.AlignHCenter
+                    width: 120
+                    height: 120
+                    rotation:-90
+                    onClicked: sendRequest("left")
+
+                }
+
+                Label {
+                    width: 120
+                    height: 120
+                    text:"OK"
+                    font.pixelSize:Theme.fontSizeExtraLarge
+                    font.family: Theme.fontFamily
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    color:okLabel.pressed ? Theme.highlightColor : Theme.primaryColor
+
+                    MouseArea{
+                        id:okLabel
+                        anchors.fill: parent
+                        onClicked: sendRequest("ok")
+                    }
+
+                }
+
+                IconButton {
+                    icon.source: "image://theme/icon-direction-forward"
+                    icon.horizontalAlignment: Image.AlignHCenter
+                    width: 120
+                    height: 120
+                    rotation:90
+                    onClicked: sendRequest("right")
+
+                }
+
+                ColorButton {
+                    color:"green"
+                    onClicked: sendRequest("green")
+                }
+
+
+                IconButton {
+                    icon.source: "image://theme/icon-direction-forward"
+                    icon.horizontalAlignment: Image.AlignHCenter
+                    width: 120
+                    height: 120
+                    rotation:180
+                    onClicked: sendRequest("down")
+
+                }
+
+                ColorButton {
+                    color:"yellow"
+                    onClicked: sendRequest("yellow")
+                }
+
+
+            }
+
+
+        }
+
+    }
+
+
+
+}
 
 
