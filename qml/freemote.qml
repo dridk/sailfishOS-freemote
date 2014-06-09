@@ -39,7 +39,7 @@ ApplicationWindow
 
     function sendRequest(uri) {
 
-        var code = "";
+        var code = settings.code();
         var doc = new XMLHttpRequest();
         doc.open("GET", "http://hd1.freebox.fr/pub/remote_control?code="+code+"&key="+uri);
         doc.send();
@@ -95,7 +95,7 @@ ApplicationWindow
                     MenuItem {
                         text: "Code télécommande"
                         onClicked:{
-                          dialog.open(true,true)
+                          dialog.open()
                         }
                     }
 
@@ -226,14 +226,34 @@ ApplicationWindow
         Dialog {
             id:dialog
             canAccept: true
+
+            onAccepted: {
+                settings.saveCode(textField.text);
+               dialog.close()
+
+            }
+
+
             Column {
                 spacing: Theme.paddingMedium
                 y: Theme.paddingLarge
-                width: parent.width
+                anchors.fill: parent
 
 
-                PageHeader {
-                    title: "Code "
+                DialogHeader {
+                           acceptText: "Enregister"
+                           title: "Code"
+
+                       }
+
+                TextField {
+                    id:textField
+                    text: settings.code()
+                    width: parent.width
+                    inputMethodHints: Qt.ImhDigitsOnly
+                    label: "Récupérer le code depuis votre Freebox"
+                    placeholderText: "Entrer le code ..."
+
                 }
 
 

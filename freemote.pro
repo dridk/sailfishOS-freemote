@@ -14,7 +14,8 @@ TARGET = freemote
 
 CONFIG += sailfishapp
 
-SOURCES += src/freemote.cpp
+SOURCES += src/freemote.cpp \
+    src/settings.cpp
 
 OTHER_FILES += qml/freemote.qml \
     rpm/freemote.changes.in \
@@ -27,4 +28,7 @@ OTHER_FILES += qml/freemote.qml \
 # following CONFIG line
 CONFIG += sailfishapp_i18n
 TRANSLATIONS += translations/freemote-de.ts
+
+HEADERS += \
+    src/settings.h
 

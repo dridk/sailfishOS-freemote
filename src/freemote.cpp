@@ -32,8 +32,12 @@
 #include <QtQuick>
 #endif
 
+#include <QCoreApplication>
+#include <QGuiApplication>
 #include <sailfishapp.h>
-
+#include <QQuickView>
+#include <QQmlContext>
+#include "settings.h"
 
 int main(int argc, char *argv[])
 {
@@ -46,6 +50,26 @@ int main(int argc, char *argv[])
     //
     // To display the view, call "show()" (will show fullscreen on device).
 
-    return SailfishApp::main(argc, argv);
+    QCoreApplication::setOrganizationName("labsquare");
+    QCoreApplication::setOrganizationDomain("labsquare.org");
+    QCoreApplication::setApplicationName("freemote");
+
+
+    Settings settings;
+
+    QScopedPointer<QGuiApplication> app(SailfishApp::application(argc, argv));
+    QScopedPointer<QQuickView> view(SailfishApp::createView());
+
+    view->rootContext()->setContextProperty("settings", &settings);
+    //     view->rootContext()->setContextProperty("appVersion", APP_VERSION);
+    //     view->rootContext()->setContextProperty("appBuildNum", APP_BUILDNUM);
+    //     view->engine()->addImportPath(SailfishApp::pathTo("qml/components").toString());
+    view->setSource(SailfishApp::pathTo("qml/freemote.qml"));
+
+    view->show();
+
+    return app->exec();
+
+
 }
 
